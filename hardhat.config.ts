@@ -18,6 +18,15 @@ const baseConfig: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: '0.6.6',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
     ],
   },
   gasReporter: {
@@ -37,12 +46,16 @@ const networks = () => {
   if (process.env.ENV === 'dev') {
     return {
       ...baseConfig.networks,
+      hardhat: {
+        chainId: 31337,
+      },
       sepolia: {
         url: 'https://sepolia.infura.io/v3/' + process.env.INFURA_TOKEN,
         chainId: 11155111,
         accounts: {
           mnemonic: process.env.MNEMONIC_DEV as string,
         },
+        ethUsdPriceFeed: '0x694AA1769357215DE4FAC081bf1f309aDC325306',
       },
       local: {
         url: 'http://127.0.0.1:7545',
@@ -59,6 +72,7 @@ const networks = () => {
         accounts: {
           mnemonic: process.env.MNEMONIC as string,
         },
+        ethUsdPriceFeed: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
       },
     };
   }
