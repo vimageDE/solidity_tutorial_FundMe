@@ -64,6 +64,9 @@ const networks = () => {
           mnemonic: process.env.MNEMONIC_DEV_LOCAL as string,
         },
       },
+      node: {
+        url: 'http://127.0.0.1:8545',
+      },
     };
   } else if (process.env.ENV === 'prod') {
     return {

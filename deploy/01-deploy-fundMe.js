@@ -8,7 +8,7 @@ module.exports = async ({ deployments }) => {
 
   // Get Eth/USD Adress for network
   let networkPriceFeedAddress;
-  const localDeploy = networkName == 'hardhat' || networkName == 'local';
+  const localDeploy = networkName == 'hardhat' || networkName == 'local' || networkName == 'node';
 
   log('Deploying to Network: ', networkName);
 
@@ -29,14 +29,15 @@ module.exports = async ({ deployments }) => {
     from: deployer.address,
     args: [networkPriceFeedAddress],
     log: false,
+    waitConfirmations: localDeploy ? 1 : 5,
   });
   log('Deployed "FundMe" contract to: ', contract_FundMe.address);
 
   // Check to Verify
   if (networkName == 'sepolia' && process.env.ETHERSCAN_TOKEN) {
-    log('Waiting for block txes...');
-    await contract_FundMe.deployTransaction.wait(6);
+    log('Verifying...');
     await verify(contract_FundMe.address, [networkPriceFeedAddress]);
+    log('Verifying completed');
   }
 
   log('Finished Deploy!');

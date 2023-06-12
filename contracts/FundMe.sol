@@ -23,6 +23,7 @@ contract FundMe {
         s_priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
+    /// @notice Funds our contract based on the ETH/USD price
     function fund() public payable {
         require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "You need to spend more ETH!");
         // require(PriceConverter.getConversionRate(msg.value) >= MINIMUM_USD, "You need to spend more ETH!");
@@ -30,8 +31,9 @@ contract FundMe {
         s_funders.push(msg.sender);
     }
 
+    // Modifiers
     modifier onlyOwner() {
-        // require(msg.sender == owner);
+        // require(msg.sender == i_owner);
         if (msg.sender != i_owner) revert FundMe__NotOwner();
         _;
     }
